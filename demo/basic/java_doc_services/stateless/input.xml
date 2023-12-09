@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<organisation>
+<employee>
+   <name>Bob</name>
+   <emp_id>1234</emp_id>
+   <department>hr</department>
+   <contact>
+      <phone>827 644 5674</phone>
+      <email>bob@organisation.com</email>
+   </contact>
+</employee>
+<employee>
+   <name>Susan</name>
+   <emp_id>2434</emp_id>
+   <department>it</department>
+   <contact>
+      <phone>827 644 5674</phone>
+      <email>Susan@organisation.com</email>
+   </contact>
+</employee>
+</organisation>
+

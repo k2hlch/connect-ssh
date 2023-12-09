@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 1.2//EN" "http://java.sun.com/j2ee/dtds/ejb-jar_1_2.dtd">
+
+<ejb-jar>
+	<display-name>A simple cart jar</display-name>
+	<description>A demo cart bean package.</description>
+
+	<enterprise-beans>	
+  	<message-driven>	
+  		<description></description>
+			<ejb-name>MessageBean</ejb-name>
+			<ejb-class>MessageBean</ejb-class>
+	  		<message-driven-destination>			
+        	<jms-destination-type>javax.jms.Queue</jms-destination-type>	
+    		</message-driven-destination>	
+          <resource-ref>
+            <description>The Factory used to produce connections to the log topic...</description>
+	   	      <res-ref-name>jms/theQueueConnectionFactory</res-ref-name>
+		        <res-type>javax.jms.QueueConnectionFactory</res-type>
+	        	<res-auth>Container</res-auth>
+	       </resource-ref>
+         <resource-ref>
+	      	<description>The log topic where log events are broadcasted...</description>
+		      <res-ref-name>jms/theQueue</res-ref-name>
+		      <res-type>javax.jms.Queue</res-type>
+	       	<res-auth>Container</res-auth>
+	       </resource-ref>
+
+          <resource-ref>
+            <description>The Factory used to produce connections to the log topic...</description>
+	   	      <res-ref-name>jms/logQueueConnectionFactory</res-ref-name>
+		        <res-type>javax.jms.QueueConnectionFactory</res-type>
+	        	<res-auth>Container</res-auth>
+	       </resource-ref>
+         <resource-ref>
+	      	<description>The log topic where log events are broadcasted...</description>
+		      <res-ref-name>jms/logQueue</res-ref-name>
+		      <res-type>javax.jms.Queue</res-type>
+	       	<res-auth>Container</res-auth>
+	       </resource-ref>
+
+		</message-driven>
+	</enterprise-beans>	
+</ejb-jar>

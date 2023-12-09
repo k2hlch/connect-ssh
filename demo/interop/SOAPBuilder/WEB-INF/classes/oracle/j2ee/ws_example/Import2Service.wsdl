@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="SoapInterop" targetNamespace="http://soapinterop.org/main/" 
+		xmlns:wsdlns1="http://soapinterop.org/definitions/"  
+		xmlns:wsdlns="http://soapinterop.org/main/"  
+		xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                xmlns:typens="http://soapinterop.org/xsd"
+		xmlns="http://schemas.xmlsoap.org/wsdl/">
+	<!-- import location="imported/import2B.wsdl" namespace="http://soapinterop.org/definitions/" / -->
+	<!-- import location="import2B.xsd" namespace="http://soapinterop.org/xsd" /-->
+<types>
+<schema targetNamespace='http://soapinterop.org/xsd'
+      xmlns='http://www.w3.org/2001/XMLSchema'      
+      elementFormDefault='unqualified'>
+      <complexType name="SOAPStruct">
+        <all>
+          <element name="varString" type="string" />
+          <element name="varInt" type="int" /> 
+          <element name="varFloat" type="float" /> 
+        </all>
+      </complexType>
+</schema>
+</types>
+        <!-- end of import2B.xsd.wsdl -->
+
+        <message name='Server.echoStruct'>
+    		<part name='inputStruct' type='typens:SOAPStruct'/>
+  	</message>
+  	<message name='Server.echoStructResponse'>
+    		<part name='Result' type='typens:SOAPStruct'/>
+  	</message>
+
+	<portType name="SoapInteropImport2PortType">
+		<operation name='echoStruct' parameterOrder='inputStruct'>
+    			  <input message='wsdlns:Server.echoStruct' />
+      			  <output message='wsdlns:Server.echoStructResponse' />
+		</operation>
+	</portType>	
+        <!-- end of imported/import2B.wsdl -->
+
+	<binding name="SoapInteropImport2Binding" type="wsdlns:SoapInteropImport2PortType">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="echoStruct">
+			<soap:operation soapAction="http://soapinterop.org/"/>
+			<input>
+				<soap:body use="encoded" namespace="http://soapinterop/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="http://soapinterop/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="Import2">
+		<port name="SoapInteropImport2Port" binding="wsdlns:SoapInteropImport2Binding">
+			<soap:address location="http://localhost:8888/soapbuilder/r3/Import2"/>
+		</port>
+	</service>
+</definitions>

@@ -1,0 +1,32 @@
+<web-service>
+    <display-name>Web Services Example</display-name>
+    <description>Java Web Service Example</description>
+    <destination-path>./javacallin.ear</destination-path>
+    <temporary-directory>./tmp</temporary-directory>
+    <context>/webservices1</context>
+    <stateless-callin-java-service>
+       <jar-generation>
+         <schema>scott/tiger</schema>
+         <db-url>jdbc:oracle:thin:@localhost:1521:sqlj</db-url>
+	 <prefix>oracle.demo.db.javacallin</prefix>
+         <db-java-name> oracle.sqlj.checker.JdbcVersion</db-java-name>
+       </jar-generation>
+       <uri>/javacallin</uri>
+       <database-JNDI-name>jdbc/OracleDS</database-JNDI-name>
+    </stateless-callin-java-service>
+  <wsdl-gen>
+    <wsdl-dir>wsdl</wsdl-dir>
+    <!--force 'true'  will write over existing wsdl -->
+    <option name="force">true</option>
+    <!-- change this to point to your soap servers http listener -->
+    <option name="httpServerURL">http://localhost:8888</option>
+  </wsdl-gen>
+
+  <proxy-gen>
+    <proxy-dir>proxy</proxy-dir>
+    <!-- include-source 'true'  will create an additional jar with only the proxy source-->
+    <option name="include-source">true</option>
+  </proxy-gen>
+</web-service>
+
+

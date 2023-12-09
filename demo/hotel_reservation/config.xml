@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<web-service>
+
+  <display-name>Hotel Web Service</display-name>
+  <description>Exposing a Hotel Management System as Web Service</description>-->
+  <destination-path>lib/Hotel-ws.ear</destination-path>
+  <temporary-directory>temp</temporary-directory>
+  <context>/HotelService</context>
+  <option name="source-path">classes</option>
+  <datasource-jndi-name>jdbc/OracleHotelDS</datasource-jndi-name>
+
+  <stateless-java-service>
+    <interface-name>com.oracle.demo.IHotel</interface-name>
+    <class-name>com.oracle.demo.Hotel</class-name>
+    <uri>/main</uri>
+  </stateless-java-service>
+
+  <stateless-java-service>
+    <interface-name>com.oracle.demo.IHotelAdmin</interface-name>
+    <class-name>com.oracle.demo.HotelAdmin</class-name>
+    <uri>/admin</uri>
+  </stateless-java-service>
+
+  <wsdl-gen>
+    <wsdl-dir>wsdl</wsdl-dir>
+    <!--force 'true'  will write over existing wsdl -->
+    <option name="force">true</option>
+    <!-- change this to point to your soap servers http listener -->
+    <option name="httpServerURL">http://localhost:8888</option>
+  </wsdl-gen>
+
+  <proxy-gen>
+    <proxy-dir>proxy</proxy-dir>
+    <!-- include-source 'true'  will create an additional jar with only the proxy source-->
+    <option name="include-source">true</option>
+  </proxy-gen>
+
+  </web-service>

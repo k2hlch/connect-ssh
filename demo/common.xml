@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<property name="env" environment="env" value="env"/>
+<property name="J2EE_HOME" value="${env.J2EE_HOME}"/>
+<property name="ORACLE_HOME" value="${env.ORACLE_HOME}"/>
+<property name="JAVA_HOME" value="${env.JAVA_HOME}"/>
+<property name="OJDK_HOME" value="${ORACLE_HOME}/jdk"/>
+<property name="TOPLINK_HOME" value="${env.TOPLINK_HOME}"/>
+<path id="common.class.path">
+   <pathelement location="."/>
+   <pathelement location="${J2EE_HOME}/lib/http_client.jar"/>
+   <pathelement location="${J2EE_HOME}/oc4j.jar"/>
+   <pathelement location="${J2EE_HOME}/lib/jdbc.jar"/>
+   <pathelement location="${J2EE_HOME}/lib/jndi.jar"/>
+   <pathelement location="${OJDK_HOME}/jre/lib/ext/jndi.jar"/>
+   <pathelement location="${J2EE_HOME}/lib/ejb.jar"/>
+   <pathelement location="${OJDK_HOME}/jre/lib/ext/jta.jar"/>
+   <pathelement location="${ORACLE_HOME}/lib/xmlparserv2.jar"/>
+   <pathelement location="${ORACLE_HOME}/lib/dsv2.jar"/>
+   <pathelement location="${ORACLE_HOME}/rdbms/jlib/xsu12.jar"/>
+   <pathelement location="${ORACLE_HOME}/jdbc/lib/classes12dms.jar"/>
+   <pathelement location="${ORACLE_HOME}/sqlj/lib/translator.jar"/>
+   <pathelement location="${ORACLE_HOME}/sqlj/lib/runtime12ee.jar"/>
+   <pathelement location="${ORACLE_HOME}/jlib/javax-ssl-1_1.jar"/>
+   <pathelement location="${ORACLE_HOME}/jlib/jssl-1_1.jar"/>
+   <pathelement location="${ORACLE_HOME}/soap/lib/soap.jar"/>
+ </path>
+<property name="common.class.path" refid="common.class.path" />
+
+<target name="common">
+      <echo message="BuildName: ${ant.project.name}" />
+      <echo message="BuildHome: ${basedir}" />
+      <echo message="BuildFile: ${ant.file}" />
+      <echo message="BuildJVM: ${ant.java.version}" />
+</target>

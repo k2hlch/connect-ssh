@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+    <!ENTITY common SYSTEM "file:../../common.xml">
+]>
+<project name="demo" default="client" basedir=".">
+ 
+   &common;
+
+   <target name="client">
+      <javac debug = "on" destdir="tmp" 
+             classpath="${common.class.path}:tmp/HelloClient_proxy.jar">
+        <src path="."/>
+        <include name="HelloClient.java"/>
+      </javac>
+      <java classname="HelloClient" fork="yes"
+            classpath="${common.class.path}:tmp:tmp/HelloClient_proxy.jar">
+            <arg value = "Echo this sentence." />
+      </java>
+   </target>
+
+</project>

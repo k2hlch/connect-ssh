@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE orion-web-app PUBLIC "-//Evermind//DTD Orion Web Application 2.3//EN" "http://xmlns.oracle.com/ias/dtds/orion-web.dtd">
+
+<orion-web-app
+	deployment-version="9.0.3.0.0"
+	jsp-cache-directory="./persistence"
+	temporary-directory="./temp"
+	servlet-webdir="/servlet/"
+>
+	<resource-ref-mapping name="jms/theNewQueueConnectionFactory" location="java:comp/resource/wsdemo/QueueConnectionFactories/aqQcf" />
+	<resource-ref-mapping name="jms/theNewQueue" location="java:comp/resource/wsdemo/Queues/queue1" />
+	<resource-ref-mapping name="jms/logTopicConnectionFactory" location="java:comp/resource/wsdemo/TopicConnectionFactories/aqTcf" />
+	<resource-ref-mapping name="jms/logTopic" location="java:comp/resource/wsdemo/Topics/topic1"/>
+</orion-web-app>

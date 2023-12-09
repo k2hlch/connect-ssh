@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+    <!ENTITY common SYSTEM "file:../../../common.xml">
+]>
+<project name="java_services_demo" default="addorionweb" basedir=".">
+
+   &common;
+ 
+   <target name="init" >
+        <property name="bld.dir" value="./build"/>
+        <property name="ejb.name" value="mdb_service2" />
+        <property name="bld.ejb.dir" value="${bld.dir}/${ejb.name}" />
+	<property name="lib.dir" value="./lib"/>
+	<property name="etc.dir" value="./etc"/>
+	<property name="web.dir" value="./web"/>
+	<property name="classes.dir" value="./classes"/>
+        <property name="src.dir" value="./MDB/src"/>
+        <property name="ear.file.name" value="jmsws2"/>
+        <property name="additional.class.path" value="${ORACLE_HOME}/j2ee/home/lib/jms.jar:${ORACLE_HOME}/j2ee/home/lib/ejb.jar::${ORACLE_HOME}/lib/wsdl.jar:${ORACLE_HOME}/soap/lib/soap.jar"/>
+   </target>  
+
+   <target name="clean" depends="init">
+        <delete dir="${bld.dir}" />
+        <delete dir="${lib.dir}" />
+   </target>
+
+   <target name="setup" depends="clean">
+	 <mkdir dir="${lib.dir}" />
+	 <mkdir dir="${bld.dir}" />     
+	 <mkdir dir="${bld.ejb.dir}" />     
+	 <mkdir dir="${bld.ejb.dir}/META-INF" />
+	 <mkdir dir="${bld.dir}/WEB-INF" />
+   </target>
+
+   <target name="compile" depends="setup">
+        <echo message="compile MDB class..."/>
+		<javac srcdir="${src.dir}"
+ 	      	destdir="${bld.ejb.dir}"
+         	classpath="${common.class.path}:${additional.class.path}"
+         	includes="*.java"/>       			
+	<echo message="compile MDB class...done"/>
+   </target>
+
+   <target name="mdbjar" depends="compile">
+        <echo message="copying xmls ..."/>
+	<copy todir="${bld.ejb.dir}/META-INF">
+        <fileset dir="${etc.dir}" includes="ejb-jar.xml, orion-ejb-jar.xml"/>
+        </copy>
+        <echo message="copying xmls ...done"/>
+        <echo message="make MDB jar..."/>
+  	<jar jarfile="${lib.dir}/${ejb.name}.jar">
+	<!-- uncomment the line below and comment the one above for ant ver 1.5+-->
+  	<!--<jar destfile="${lib.dir}/${ejb.name}.jar">-->
+        <fileset dir="${bld.ejb.dir}" includes="**"/>
+        </jar>
+        <echo message="make MDB jar...done"/>
+   </target>
+
+   <target name="assemble" depends="mdbjar">
+        <echo message="assembling Web Services EAR. .."/>
+		<java jar="${ORACLE_HOME}/webservices/lib/WebServicesAssembler.jar" fork="yes"
+          	classpath="${common.class.path}:${additional.class.path}"
+          	failonerror="true">
+      		<arg value="-config"/>
+      		<arg value="./config.xml"/>
+  		</java>
+        <echo message="assembling Web Services EAR...done"/>
+   </target>
+
+   <target name="addorionweb" depends="assemble">
+        <echo message="take out ${ear.file.name}_web.war from  ${ear.file.name}.ear..."/>
+            <unjar src="${lib.dir}/${ear.file.name}.ear" dest="${bld.dir}" >
+    	    <patternset>
+            <include name="${ear.file.name}_web.war"/>
+    	    </patternset>
+            </unjar>
+        <echo message="take out ${ear.file.name}_web.war...done"/>
+        <echo message="insert orion-web.xml. .."/>
+	<copy todir="${bld.dir}/WEB-INF">
+            <fileset dir="${etc.dir}" includes="orion-web.xml"/>
+            </copy>
+            <jar jarfile="${bld.dir}/${ear.file.name}_web.war" update="true">
+ 	    <!-- uncomment the line below and comment the one above for ant ver 1
+.5+-->
+            <!--<jar destfile="${bld.dir}/${ear.file.name}_web.war" update="true">-->
+	    <fileset dir="${bld.dir}" includes="WEB-INF/orion-web.xml"/>
+            </jar>
+         <echo message="insert orion-web.xml...done"/>
+         <echo message="put back ${ear.file.name}_web.war. .."/>
+            <jar jarfile="${lib.dir}/${ear.file.name}.ear" update="true">
+  	    <!-- uncomment the line below and comment the one above for ant ver 1
+.5+-->
+            <!--<jar destfile="${lib.dir}/${ear.file.name}.ear" update="true">-->
+	    <fileset dir="${bld.dir}" includes="${ear.file.name}_web.war"/>
+            </jar>
+         <echo message="put back ${ear.file.name}_web.war into ${ear.file.name}.ear...done"/>
+    </target>
+
+
+
+</project>

@@ -1,0 +1,78 @@
+<web-service>
+
+    <display-name>SOAPBuilder Web Services</display-name>
+    <description>collection of endpoints to test interop, using SOAPBuilder test specifications.</description>
+    <option name="source-path">./build/classes</option>
+
+    <!-- Specifies the resulting web service archive will be stored in
+         ./soapbuilder.ear -->
+    <destination-path>./soapbuilder.ear</destination-path>
+
+    <!-- Specifies the temporary directory that web service assembly 
+         tool can create temporary files. -->
+    <temporary-directory>./build/tmp</temporary-directory>
+
+    <!-- Specifies the web services will be accessed in the servlet context
+         named "/soapbuilder". -->
+    <context>/soapbuilder</context>
+
+    <!-- Round II endpoints -->
+    <stateless-java-service>
+        <interface-name>oracle.j2ee.ws_example.IInteropTest</interface-name>
+        <class-name>oracle.j2ee.ws_example.InteropTest</class-name>
+        <uri>/r2/InteropTest</uri>
+    </stateless-java-service>
+    <stateless-java-service>
+        <interface-name>oracle.j2ee.ws_example.IInteropTest2</interface-name>
+        <class-name>oracle.j2ee.ws_example.InteropTest</class-name>
+        <uri>/r2/InteropTest2</uri>
+    </stateless-java-service>
+
+    <!-- Round III endpoints - rpc style-->
+    <stateless-java-service>
+        <class-name>oracle.j2ee.ws_example.Import1Service</class-name>
+        <uri>/r3/Import1</uri>
+    </stateless-java-service>
+    <stateless-java-service>
+        <class-name>oracle.j2ee.ws_example.Import2Service</class-name>
+        <uri>/r3/Import2</uri>
+    </stateless-java-service>
+    <stateless-java-service>
+        <class-name>oracle.j2ee.ws_example.Import3Service</class-name>
+        <uri>/r3/Import3</uri>
+    </stateless-java-service>
+
+    <!-- Round III endpoints - doc style-->
+    <stateless-java-service>
+        <class-name>oracle.j2ee.ws_example.Compound1Service</class-name>
+        <uri>/r3/Compound1</uri>
+        <message-style>doc</message-style>
+    </stateless-java-service>
+    <stateless-java-service>
+        <class-name>oracle.j2ee.ws_example.Compound2Service</class-name>
+        <uri>/r3/Compound2</uri>
+        <message-style>doc</message-style>
+    </stateless-java-service>
+    <stateless-java-service>
+        <class-name>oracle.j2ee.ws_example.InteropTestDocLitParametersService</class-name>
+        <uri>/r3/InteropTestDocLitParameters</uri>
+        <message-style>doc</message-style>
+    </stateless-java-service>
+    <stateless-java-service>
+        <class-name>oracle.j2ee.ws_example.InteropTestDocLitService</class-name>
+        <uri>/r3/InteropTestDocLit</uri>
+        <message-style>doc</message-style>
+    </stateless-java-service>
+    <stateless-java-service>
+        <interface-name>oracle.j2ee.ws_example.InteropTestRpcEnc</interface-name>
+        <class-name>oracle.j2ee.ws_example.InteropTest</class-name>
+        <uri>/r3/InteropTestRpcEnc</uri>
+    </stateless-java-service>
+
+    <wsdl-gen>
+      <wsdl-dir>./build/wsdl</wsdl-dir>
+      <option name="force">true</option>
+      <!--option name="httpServerURL">http://ws-interop.oracle.com</option-->
+    </wsdl-gen>
+
+</web-service>

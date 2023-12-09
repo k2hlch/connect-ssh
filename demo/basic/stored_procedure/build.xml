@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+    <!ENTITY common SYSTEM "file:../../common.xml">
+]>
+<project name="sp_demo" default="all" basedir=".">
+ 
+   &common;
+
+   <target name="all" depends="client" />
+
+   <target name="client">
+
+     <pathconvert pathsep="${path.separator}" dirsep="${file.separator}" property="blcp" >
+       <path id="build.classpath">
+          <pathelement location="proxy/sp/company/proxy/Company_proxy.jar" />
+       </path>
+     </pathconvert>
+
+
+      <echo message="Compiling client code TestSP.java..."/>
+      <javac destdir="." 
+             classpath="${common.class.path}:${blcp}">
+        <src path="."/>
+        <include name="TestSP.java"/>
+      </javac>
+      <echo message="Compiling client code Client.java... Done."/>
+
+      <echo message="Executing Client..."/>
+      <java classname="TestSP" fork="yes"
+            classpath="${common.class.path}:${blcp}">
+      </java>
+      <echo message="Executing Client... Done."/>
+   </target>
+
+</project>

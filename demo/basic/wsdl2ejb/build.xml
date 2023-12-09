@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+    <!ENTITY common SYSTEM "file:../../common.xml">
+]>
+<project name="wsdl2ejb_demo" default="all" basedir=".">
+ 
+   &common;
+
+   <property name="RMI_HOST"  value="localhost"/>
+   <property name="RMI_PORT"  value="23791"/>
+   <property name="RMI_ADMIN" value="admin"/>
+   <property name="RMI_PWD"   value="welcome"/>
+
+   <target name="all" depends="rpc_doc_cl" />
+
+   <!-- 
+        Simple RPC and Document style WSDL
+     -->
+   <target name="rpc_doc_gen" depends="common">
+      <echo message="Generating EJB using rpc_doc/rpc_doc_conf.xml..."/>
+      <delete dir="rpc_doc/generated" />
+      <java jar="${ORACLE_HOME}/webservices/lib/wsdl2ejb.jar" fork="yes">
+        <arg line="-conf rpc_doc/rpc_doc_conf.xml"/>
+      </java>
+      <echo message="Generating EJB using rpc_doc/rpc_doc_conf.xml... Done."/>
+   </target>
+
+   <target name="rpc_doc_dep" depends="rpc_doc_gen">
+      <echo message="Deploying rpc_doc/generated/TestApp.ear..."/>
+      <java jar="${J2EE_HOME}/admin.jar" fork="yes">
+        <arg line="ormi://${RMI_HOST}:${RMI_PORT} ${RMI_ADMIN} ${RMI_PWD} -deploy -file rpc_doc/generated/TestApp.ear -deploymentName Wsdl2EjbTestApp1"/>
+      </java>
+      <echo message="Deploying rpc_doc/generated/TestApp.ear... Done."/>
+   </target>
+ 
+   <target name="rpc_doc_cl" depends="rpc_doc_dep">
+      <echo message="Compiling client code TestRpcDocClient.java..."/>
+      <javac destdir="rpc_doc" 
+             classpath="${common.class.path}:rpc_doc/generated/deploy/TestEjb.jar">
+        <src path="rpc_doc"/>
+        <include name="TestRpcDocClient.java"/>
+      </javac>
+      <echo message="Compiling client code TestRpcDocClient.java... Done."/>
+
+      <echo message="Executing TestRpcDocClient..."/>
+      <java classname="TestRpcDocClient" fork="yes"
+            classpath="${common.class.path}:rpc_doc/generated/deploy/TestEjb.jar:rpc_doc">
+        <arg line="${RMI_HOST} ${RMI_PORT} ${RMI_ADMIN} ${RMI_PWD}"/>
+      </java>
+      <echo message="Executing TestRpcDocClient... Done."/>
+   </target>
+
+</project>

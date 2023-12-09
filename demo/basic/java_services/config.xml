@@ -1,0 +1,63 @@
+<web-service>
+
+    <display-name>Web Services Example</display-name>
+    <description>Java Web Service Example</description>
+
+    <!-- Specifies the resulting web service archive will be stored in
+         ./ws_example.ear -->
+    <destination-path>./ws_example.ear</destination-path>
+
+    <!-- Specifies the temporary directory that web service assembly 
+         tool can create temporary files. -->
+    <temporary-directory>./tmp</temporary-directory>
+
+    <!-- Specifies the web service will be accessed in the servlet context
+         named "/webservices". -->
+    <context>/webservices</context>
+
+    <!-- Specifies the web service will be stateless -->
+    <stateless-java-service>
+        <interface-name>oracle.j2ee.ws_example.StatelessExample</interface-name>
+        <class-name>oracle.j2ee.ws_example.StatelessExampleImpl</class-name>
+
+        <!-- Specifies the web service will be accessed in the uri named
+             "statelessTest" within the servlet context. -->
+        <uri>/statelessTest</uri>
+
+        <!-- Specifies the location of Java class files are under
+             ./src -->
+        <java-resource>./src</java-resource>
+
+    </stateless-java-service>
+
+    <stateful-java-service>
+        <interface-name>oracle.j2ee.ws_example.StatefulExample</interface-name>
+        <class-name>oracle.j2ee.ws_example.StatefulExampleImpl</class-name>
+
+        <!-- Specifies the web service will be accessed in the uri named
+             "statefullTest" within the servlet context. -->
+        <uri>/statefulTest</uri>
+
+        <!-- Specifies the location of Java class files are under
+             ./src -->
+        <java-resource>./src</java-resource>
+
+    </stateful-java-service>
+
+	
+  <stateful-java-service>
+        <interface-name>oracle.j2ee.ws_example.BeanExample</interface-name>
+        <class-name>oracle.j2ee.ws_example.BeanExampleImpl</class-name>
+
+        <!-- Specifies the web service will be accessed in the uri named
+             "beanTest" within the servlet context. -->
+        <uri>/beanTest</uri>
+
+        <!-- Specifies the location of Java class files are under
+             ./src -->
+        <java-resource>./src</java-resource>
+
+   </stateful-java-service>
+
+
+</web-service>

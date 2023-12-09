@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC '-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN' 'http://java.sun.com/dtd/web-app_2_3.dtd'>
+
+<web-app>
+<servlet>
+  <servlet-name>stateless Java web service - /soapbuilder/r2/InteropTest</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaRpcWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.InteropTest</param-value>
+  </init-param>
+  <init-param>
+    <param-name>interface-name</param-name>
+    <param-value>oracle.j2ee.ws_example.IInteropTest</param-value>
+  </init-param>
+  <init-param>
+    <param-name>custom-bean-qname</param-name>
+    <param-value>oracle.j2ee.ws_example.SOAPStruct,http://soapinterop.org/xsd,SOAPStruct</param-value>
+    <description>overwrite default naming rules for beans QName, to improve interop.</description>
+  </init-param>
+</servlet>
+
+<servlet>
+  <servlet-name>stateless Java web service - /soapbuilder/r2/InteropTest2</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaRpcWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.InteropTest</param-value>
+  </init-param>
+  <init-param>
+    <param-name>interface-name</param-name>
+    <param-value>oracle.j2ee.ws_example.IInteropTest2</param-value>
+  </init-param>
+</servlet>
+
+<servlet>
+  <servlet-name>stateless Java web service - /soapbuilder/r3/Import1</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaRpcWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.Import1Service</param-value>
+  </init-param>
+</servlet>
+
+<servlet>
+  <servlet-name>stateless Java web service - /soapbuilder/r3/Import2</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaRpcWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.Import2Service</param-value>
+  </init-param>
+  <init-param>
+    <param-name>custom-bean-qname</param-name>
+    <param-value>oracle.j2ee.ws_example.SOAPStruct,http://soapinterop.org/xsd,SOAPStruct</param-value>
+    <description>overwrite default naming rules for beans QName, to improve interop.</description>
+  </init-param>
+</servlet>
+
+<servlet>
+  <servlet-name>stateless Java web service - /soapbuilder/r3/Import3</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaRpcWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.Import3Service</param-value>
+  </init-param>
+  <init-param>
+    <param-name>custom-bean-qname</param-name>
+    <param-value>oracle.j2ee.ws_example.SOAPStruct,http://soapinterop.org/xsd,SOAPStruct</param-value>
+    <description>overwrite default naming rules for beans QName, to improve interop.</description>
+  </init-param>
+</servlet>
+
+<servlet>
+  <servlet-name>stateless Java Doc web service - /soapbuilder/r3/Compound1</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaDocWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.Compound1Service</param-value>
+  </init-param>
+</servlet>
+
+<servlet>
+  <servlet-name>stateless Java Doc web service - /soapbuilder/r3/Compound2</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaDocWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.Compound2Service</param-value>
+  </init-param>
+</servlet>
+
+<servlet>
+  <servlet-name>stateless Java Doc web service - /soapbuilder/r3/InteropTestDocLit</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaDocWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.InteropTestDocLitService</param-value>
+  </init-param>
+</servlet>
+
+<servlet>
+  <servlet-name>stateless Java Doc web service - /soapbuilder/r3/InteropTestDocLitParameters</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaDocWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.InteropTestDocLitParametersService</param-value>
+  </init-param>
+</servlet>
+
+<servlet>
+  <servlet-name>stateless Java web service - /soapbuilder/r3/InteropTestRpcEnc</servlet-name>
+  <servlet-class>oracle.j2ee.ws.StatelessJavaRpcWebService</servlet-class>
+  <init-param>
+    <param-name>class-name</param-name>
+    <param-value>oracle.j2ee.ws_example.InteropTest</param-value>
+  </init-param>
+  <init-param>
+    <param-name>interface-name</param-name>
+    <param-value>oracle.j2ee.ws_example.InteropTestRpcEnc</param-value>
+  </init-param>
+  <init-param>
+    <param-name>custom-bean-qname</param-name>
+    <param-value>oracle.j2ee.ws_example.SOAPStruct,http://soapinterop.org/xsd,SOAPStruct</param-value>
+  </init-param>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>stateless Java web service - /soapbuilder/r2/InteropTest</servlet-name>
+  <url-pattern>/r2/InteropTest</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>stateless Java web service - /soapbuilder/r2/InteropTest2</servlet-name>
+  <url-pattern>/r2/InteropTest2</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>stateless Java web service - /soapbuilder/r3/Import1</servlet-name>
+  <url-pattern>/r3/Import1</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>stateless Java web service - /soapbuilder/r3/Import2</servlet-name>
+  <url-pattern>/r3/Import2</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>stateless Java web service - /soapbuilder/r3/Import3</servlet-name>
+  <url-pattern>/r3/Import3</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>stateless Java Doc web service - /soapbuilder/r3/Compound1</servlet-name>
+  <url-pattern>/r3/Compound1</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>stateless Java Doc web service - /soapbuilder/r3/Compound2</servlet-name>
+  <url-pattern>/r3/Compound2</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>stateless Java Doc web service - /soapbuilder/r3/InteropTestDocLit</servlet-name>
+  <url-pattern>/r3/InteropTestDocLit</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>stateless Java Doc web service - /soapbuilder/r3/InteropTestDocLitParameters</servlet-name>
+  <url-pattern>/r3/InteropTestDocLitParameters</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>stateless Java web service - /soapbuilder/r3/InteropTestRpcEnc</servlet-name>
+  <url-pattern>/r3/InteropTestRpcEnc</url-pattern>
+</servlet-mapping>
+
+<welcome-file-list>
+  <welcome-file>index.html</welcome-file>
+</welcome-file-list>
+
+</web-app>

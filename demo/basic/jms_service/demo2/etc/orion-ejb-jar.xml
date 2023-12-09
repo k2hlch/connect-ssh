@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE orion-ejb-jar PUBLIC "-//Evermind//DTD Enterprise JavaBeans 1.1 runtime//EN" "http://xmlns.oracle.com/ias/dtds/orion-ejb-jar.dtd">
+
+<orion-ejb-jar deployment-version="1.0.2.2" deployment-time="e7f1ce76f6">
+	<enterprise-beans>
+
+        <message-driven-deployment 
+       		 connection-factory-location="java:comp/resource/wsdemo/QueueConnectionFactories/aqQcf"
+		destination-location="java:comp/resource/wsdemo/Queues/queue1" 
+                name="MessageBean2" >
+		<!-- topic resource refs -->
+		<resource-ref-mapping name="jms/logTopic" location="java:comp/resource/wsdemo/Topics/topic1"/>
+		<resource-ref-mapping name="jms/logTopicConnectionFactory" location="java:comp/resource/wsdemo/TopicConnectionFactories/aqTcf" />
+
+		<!-- queue resource refs -->
+                <resource-ref-mapping name="jms/theNewQueueConnectionFactory" location="java:comp/resource/wsdemo/QueueConnectionFactories/aqQcf" />
+                <resource-ref-mapping name="jms/theNewQueue" location="java:comp/resource/wsdemo/Queues/queue1" />
+
+
+ 	 </message-driven-deployment>
+	</enterprise-beans>
+	<assembly-descriptor>
+		<default-method-access>
+			<security-role-mapping name="&lt;default-ejb-caller-role&gt;" impliesAll="true" />
+		</default-method-access>
+	</assembly-descriptor>
+</orion-ejb-jar>

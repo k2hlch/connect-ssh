@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+    <!ENTITY common SYSTEM "file:../../common.xml">
+]>
+<project name="java_services_demo" default="all" basedir=".">
+ 
+   &common;
+
+   <target name="all" depends="client, statelessclient, beanclient" />
+
+   <target name="beanclient">
+      <echo message="Compiling client code BeanClient.java..."/>
+      <javac destdir="." 
+             classpath="${common.class.path}:client/bean_proxy.jar">
+        <src path="client"/>
+        <include name="BeanClient.java"/>
+      </javac>
+      <echo message="Compiling client code BeanClient.java... Done."/>
+
+      <echo message="Executing BeanClient..."/>
+      <java classname="BeanClient" fork="yes"
+            classpath="${common.class.path}:client/bean_proxy.jar">
+      </java>
+      <echo message="Executing Client... Done."/>
+   </target>
+
+
+
+   <target name="client">
+      <echo message="Compiling client code Client.java..."/>
+      <javac destdir="." 
+             classpath="${common.class.path}:client/StatefulExample_proxy.jar">
+        <src path="client"/>
+        <include name="Client.java"/>
+      </javac>
+      <echo message="Compiling client code Client.java... Done."/>
+
+      <echo message="Executing Client..."/>
+      <java classname="Client" fork="yes"
+            classpath="${common.class.path}:client/StatefulExample_proxy.jar">
+      </java>
+      <echo message="Executing Client... Done."/>
+   </target>
+
+
+    <target name="statelessclient">
+      <echo message="Compiling client code StatelessClient.java..."/>
+      <javac destdir="" 
+             classpath="${common.class.path}:client/StatelessExample_proxy.jar">
+        <src path="client"/>
+        <include name="StatelessClient.java"/>
+      </javac>
+      <echo message="Compiling client code StatelessClient.java... Done."/>
+
+      <echo message="Executing StatelessClient..."/>
+      <java classname="StatelessClient" fork="yes"
+            classpath="${common.class.path}:client/StatelessExample_proxy.jar">
+      </java>
+      <echo message="Executing StatelessClient... Done."/>
+   </target>
+
+</project>

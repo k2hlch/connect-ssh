@@ -1,0 +1,47 @@
+<?xml version="1.0" ?> 
+ <web-service>
+  <display-name>JMS Web Service Example</display-name> 
+  <description>JMS Web Service Example</description>
+
+   <!-- Name of the destination --> 
+  <destination-path>./jmsws1.ear</destination-path> 
+
+  <temporary-directory>./tmp</temporary-directory> 
+
+  <!-- Context root of the application -->
+  <context>/jmsws1</context> 
+
+  <!-- Path of the jar file with MDBs definied/implemented in it -->
+  <option name="source-path">MDB/mdb_service1.jar</option> 
+
+  <!--  tags for jms doc service  -->
+  <jms-doc-service>
+    <uri>JmsSend</uri> 
+    <connection-factory-resource-ref>jms/theQueueConnectionFactory</connection-factory-resource-ref> 
+    <queue-resource-ref>jms/theQueue</queue-resource-ref> 
+    <operation>send</operation>x
+  </jms-doc-service>
+
+  <jms-doc-service>
+    <uri>JmsReceive</uri> 
+    <connection-factory-resource-ref>jms/logQueueConnectionFactory</connection-factory-resource-ref> 
+    <queue-resource-ref>jms/logQueue</queue-resource-ref> 
+    <operation>receive</operation>
+   </jms-doc-service> 
+
+    <!-- generate the wsdl -->
+    <wsdl-gen>
+           <wsdl-dir>wsdl</wsdl-dir>
+           <!-- over-write a pregenerated wsdl , turn it 'false' to use the pregenerated wsdl-->
+           <option name="force">true</option>
+           <option name="httpServerURL">http://localhost:8888</option>
+           <!-- do not package the wsdl -generate it again on teh server-->
+           <option name="packageIt">false</option>
+    </wsdl-gen>
+
+    <!-- generate the proxy -->
+    <proxy-gen>
+           <proxy-dir>proxy</proxy-dir>
+           <option name="include-source">true</option>
+    </proxy-gen>
+</web-service>

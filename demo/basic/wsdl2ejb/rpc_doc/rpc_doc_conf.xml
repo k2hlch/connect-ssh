@@ -1,0 +1,16 @@
+<wsdl2ejb>
+
+  <!--
+   Uncomment the following line if you need proxy setting 
+  <useProxy proxyHost="myproxy.dom.com" proxyPort="80"/>
+  -->
+  
+  <wsdl>
+    <location>rpc_doc/DocAndRpc.wsdl</location>
+  </wsdl>
+
+  <ejb>
+    <destination-dir>rpc_doc/generated</destination-dir>
+  </ejb>
+
+</wsdl2ejb>

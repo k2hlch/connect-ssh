@@ -1,0 +1,45 @@
+<web-service>
+
+    <display-name>Header Example</display-name>
+    <description>Header Example</description>
+
+    <!-- Specifies the resulting web service archive will be stored in
+         ./header_demo.ear -->
+    <destination-path>./header_demo.ear</destination-path>
+
+    <!-- Specifies the temporary directory that web service assembly 
+         tool can create temporary files. -->
+    <temporary-directory>./tmp</temporary-directory>
+
+    <!-- Specifies the web service will be accessed in the servlet context
+         named "/webservices". -->
+    <context>/hdemo</context>
+
+    <!-- Specifies the web service will be stateless -->
+    <stateless-java-service>
+        <interface-name>Employee</interface-name>
+        <class-name>EmployeeImpl</class-name>
+
+        <!-- Specifies the web service will be accessed in the uri named
+             "/Employee" within the servlet context. -->
+        <uri>/Employee</uri>
+
+        <!-- Specifies that the Java class files are under ./src -->
+        <java-resource>./src</java-resource>
+
+    </stateless-java-service>
+
+    <!-- generate the wsdl -->
+    <wsdl-gen>
+           <wsdl-dir>wsdl</wsdl-dir>
+           <!-- change the httpServerURL to point to your http listener -->
+           <option name="httpServerURL">http://localhost:8888</option>
+    </wsdl-gen>
+
+
+    <!-- generate the proxy -->
+    <proxy-gen>
+           <proxy-dir>proxy</proxy-dir>
+           <option name="include-source">true</option>
+    </proxy-gen> 
+</web-service>

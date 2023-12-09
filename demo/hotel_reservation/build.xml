@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project name="java_services_demo" default="makeear" basedir=".">
+ 
+ 
+  <target name="init" >
+   
+    <property name="bld.dir" value="./build"/>
+    <property name="lib.dir" value="./lib"/>
+    <property name="etc.dir" value="./etc"/>
+    <property name="web.dir" value="./web"/>
+    <property name="proxy.dir" value="./proxy/com/oracle/demo/proxy/"/>
+
+  </target>  
+
+  <target name="clean" depends="init">
+      <delete dir="${bld.dir}" />
+   </target>
+
+   <target name="setup" depends="clean">
+      <mkdir dir="${lib.dir}" />
+      <mkdir dir="${bld.dir}" />     
+   </target>
+
+
+
+   <target name="makewar" depends="setup">
+      <echo message="Making Consumer.war file..."/>
+       <war warfile="${bld.dir}/Consumer.war"  webxml="${etc.dir}/web.xml">
+        <!-- uncomment the line below and comment the one above for ant ver 1.5+ --> 
+        <!--<war destfile="${bld.dir}/Consumer.war" webxml="${etc.dir}/web.xml">-->
+        <fileset dir="${web.dir}"/>
+        <lib dir="${proxy.dir}" excludes="*src.jar,*.class,*.java"/>
+        
+       
+      </war>
+      <echo message="..war file made"/>
+   </target>
+
+
+    <target name="makeear" depends="makewar">
+      <echo message="making Consumer.ear"/>
+        <ear earfile="${lib.dir}/Consumer.ear" appxml="${etc.dir}/application.xml">
+        <!-- uncomment the line below and comment the one above for ant ver 1.5+ --> 
+        <!--<ear destfile="${lib.dir}/Consumer.ear" appxml="${etc.dir}/application.xml">-->
+        <fileset dir="${bld.dir}" includes="*.jar,*.war"/>
+      </ear>
+      <delete dir="${bld.dir}" />
+      <echo message="lib/Consumer.ear made.. "/>
+   </target>
+
+</project>

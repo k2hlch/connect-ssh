@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+    <!ENTITY common SYSTEM "file:../../common.xml">
+]>
+<project name="java_services_demo" default="all" basedir=".">
+ 
+   &common;
+
+   <target name="all" depends="compileServiceClasses,createpackage,deployAndBind,empclientCompile,empclientRun" />
+
+  <target name="init" >
+	<property name="ormi.url" value="ormi://localhost"/> 
+	<property name="root.context" value="/hdemo"/> 
+	<property name="user.id" value="admin"/> 
+	<property name="password" value="welcome"/> 
+	<property name="web.site" value="http-web-site"/>
+	<property name="client.dir" value="./client"/> 
+	<property name="classes.dir" value="./classes"/> 
+	<property name="src.dir" value="./src"/> 
+	<property name="proxy.dir" value="./proxy"/>
+	<property name="wsdl.dir" value="./wsdl"/>
+	<property name="proxy.jar" value="${proxy.dir}/Employee_proxy.jar"/>
+	<property name="wsdl.dir" value="./wsdl"/>
+	<property name="appfile" value="header_demo.ear"/>
+	<property name="dep.appname" value="hdemo_app"/>
+	<property name="web.appname" value="header_demo_web"/>
+  </target> 
+   
+  <target name="clean" depends="init">
+      <delete dir="${classes.dir}" />
+      <delete dir="${proxy.dir}" />
+      <delete dir="${wsdl.dir}" />
+      <delete file="${appfile}" />
+  </target>
+
+   <target name="setup" depends="clean">
+      <mkdir dir="${classes.dir}" />
+      <mkdir dir="${proxy.dir}" />      
+   </target>
+
+
+   <target name="compileServiceClasses" depends="setup">
+      <echo message="Compiling service classes "/>            
+      <javac srcdir="${src.dir}" 
+         destdir="${classes.dir}"         
+         classpath="${common.class.path}"			 
+         includes="*.java"
+       />
+      <echo message="compileServiceClass... Done."/>
+   </target>
+
+  <target name="createpackage">
+      <echo message="Creating the ear "/> 
+      <java jar="${ORACLE_HOME}/webservices/lib/WebServicesAssembler.jar" fork="yes"
+       	  failonerror="true">
+      <arg value="-config"/>
+      <arg value="./config.xml"/>
+      </java>
+      <echo message="createpackage... Done."/>
+   </target>
+
+   <target name="deployAndBind" depends="init">
+      <echo message="Deploying webservice package  "/>           
+      <java jar="${ORACLE_HOME}/j2ee/home/admin.jar" fork="yes"
+         classpath="${common.class.path}"
+         failonerror="true">
+         <arg line="${ormi.url} ${user.id} ${password}  -deploy -file ${appfile} -deploymentName ${dep.appname}"/>
+      </java>      
+      <echo message="Deploying webservice package...Done  "/>
+      <echo message="Binding webservice package  "/>            
+      <java jar="${ORACLE_HOME}/j2ee/home/admin.jar" fork="yes"
+         classpath="${common.class.path}"
+         failonerror="true">
+         <arg line="${ormi.url} ${user.id} ${password} -bindWebApp ${dep.appname} ${web.appname} ${web.site} ${root.context}"/> 
+      </java>      
+      <echo message="Binding webservice package...Done  "/>          
+   </target>
+	
+	
+   <target name="empclientCompile" depends="init">
+      <echo message="Compiling client code EmployeeClient.java..."/>
+      <javac destdir="${client.dir}"
+             classpath="${common.class.path}:${proxy.jar}">
+        <src path="client"/>
+        <include name="EmployeeClient.java"/>
+      </javac>
+      <echo message="Compiling client code EmployeeClient.java... Done
+."/>
+   </target>
+
+   <target name="empclientRun" depends="init">
+      <echo message="Running client code EmployeeClient..."/>
+            <java classname="EmployeeClient" fork="yes"
+            classpath="${common.class.path}:${proxy.jar}:${client.dir}"
+			failonerror="true">
+      </java>
+      <echo message="Running EmployeeClient... Done."/>
+   </target>
+
+</project>

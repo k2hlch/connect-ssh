@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+    <!ENTITY common SYSTEM "file:../../../common.xml">
+]>
+<project name="java_services_demo" default="all" basedir=".">
+ 
+   &common;
+
+   <target name="all" depends="statelessclientRun" />
+
+  <target name="init" >
+	<property name="ormi.url" value="ormi://localhost"/> 
+	<property name="root.context" value="/statelessdocws"/> 
+	<property name="user.id" value="admin"/> 
+	<property name="password" value="welcome"/> 
+	<property name="web.site" value="http-web-site"/>
+	<property name="client.dir" value="./client"/> 
+	<property name="classes.dir" value="./classes"/> 
+	<property name="src.dir" value="./src"/> 
+	<property name="proxy.dir" value="./proxy"/>
+	<property name="proxy.jar" value="${proxy.dir}/StatelessDoc_proxy.jar"/>
+	<property name="wsdl.dir" value="./wsdl"/>
+  </target> 
+   
+  <target name="clean" depends="init">
+      <delete dir="${classes.dir}" />
+      <delete dir="${proxy.dir}" />
+      <delete dir="${wsdl.dir}" />
+   </target>
+
+   <target name="setup" depends="clean">
+      <mkdir dir="${classes.dir}" />
+      <mkdir dir="${proxy.dir}" />      
+   </target>
+
+
+   <target name="compileServiceClasses" depends="setup">
+      <echo message="Compiling service classes "/>            
+      <javac srcdir="${src.dir}" 
+         destdir="${classes.dir}"         
+         classpath="${common.class.path}"			 
+         includes="*.java"
+       />
+      <echo message="compileServiceClass... Done."/>
+   </target>
+
+   <target name="createpackage" depends="compileServiceClasses">
+      <echo message="Creating the ear "/> 
+      <java jar="${ORACLE_HOME}/webservices/lib/WebServicesAssembler.jar" fork="yes"
+       	  failonerror="true">
+      <arg value="-config"/>
+      <arg value="./config.xml"/>
+      </java>
+      <echo message="createpackage... Done."/>
+   </target>
+
+   <target name="deployAndBind" depends="createpackage">
+      <echo message="Deploying webservice package  "/>            
+      <java jar="${ORACLE_HOME}/j2ee/home/admin.jar" fork="yes"
+         classpath="${common.class.path}"
+         failonerror="true">
+         <arg line="${ormi.url} ${user.id} ${password}  -deploy -file statelessdocws.ear -deploymentName StatelessDocService"/>
+      </java>      
+      <echo message="Deploying webservice package...Done  "/>
+      <echo message="Binding webservice package  "/>            
+      <java jar="${ORACLE_HOME}/j2ee/home/admin.jar" fork="yes"
+         classpath="${common.class.path}"
+         failonerror="true">
+         <arg line="${ormi.url} ${user.id} ${password} -bindWebApp StatelessDocService statelessdocws_web ${web.site} ${root.context}"/> 
+      </java>      
+      <echo message="Binding webservice package...Done  "/>          
+   </target>
+	
+	
+   <target name="statelessclientCompile" depends="createpackage">
+      <echo message="Compiling client code StatelessDocClient.java..."/>
+      <javac destdir="${client.dir}/" 
+             classpath="${common.class.path}:${proxy.jar}">
+        <src path="${client.dir}/"/>
+        <include name="StatelessDocClient.java"/>
+      </javac>
+      <echo message="Compiling client code StatelessClient.java... Done."/>
+   </target>
+
+   <target name="statelessclientRun" depends="statelessclientCompile,deployAndBind">
+      <echo message="Executing StatelessDocClient..."/>
+      <java classname="StatelessDocClient" fork="yes"
+            classpath="${common.class.path}:${proxy.jar}:${client.dir}"
+			failonerror="true">
+      </java>
+      <echo message="Executing StatelessDocClient... Done."/>
+   </target>
+
+</project>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+    <!ENTITY common SYSTEM "file:../../common.xml">
+]>
+<!-- 
+List of custom setup you may have to modify to fit with your own environment:
+- http-web-site is the name of the default when used in standalone mode.
+  when using Oracle 9iAS the only web site defined is default-web-site.
+- if you have to use a proxy to connect to the outside, you should remove the
+  comments in the remote_run target and enter the name of your HTTP proxy.
+- if you are not using the default port (8888), you should modify the app.host_port
+  property.
+-->
+<project name="SOAPBuilder endpoints" default="all" basedir=".">
+ &common;
+
+  <property name="src.dir" value="./src"/>
+  <property name="build.dir" value="./build"/>
+  <property name="build.classes" value="${build.dir}/classes"/>
+
+  <property name="ormi.url" value="ormi://localhost"/> 
+  <property name="user.id" value="admin"/> 
+  <property name="password" value="welcome"/>
+  <property name="root.context" value="/soapbuilder"/>
+  <property name="app.name" value="soapbuilder"/>
+  <property name="app.host_port" value="${env.HOST}:8888"/>
+
+  <target name="clean" description="Removes all generated files.">
+      <delete dir="${build.dir}" />
+   </target>
+
+   <target name="setup" >
+      <mkdir dir="${build.dir}" />
+      <mkdir dir="${build.classes}" />
+      <mkdir dir="${build.dir}/wsdl" />
+      <mkdir dir="${build.dir}/WEB-INF" />
+      <mkdir dir="${build.dir}/tmp" />
+   </target>
+
+   <target name="compile" depends="setup">
+      <echo message="Compiling service classes ..."/>
+      <javac srcdir="${src.dir}"
+         destdir="${build.classes}"
+         classpath="${ORACLE_HOME}/j2ee/home/oc4j.jar:${ORACLE_HOME}/soap/lib/wsdl.jar:${ORACLE_HOME}/soap/lib/soap.jar:${ORACLE_HOME}/lib/xmlparserv2.jar"
+      />
+      <echo message="Compiling service classes Done."/>
+   </target>
+
+   <target name="create_package" depends="compile">
+      <echo message="Creating ${app.name}.ear ..."/> 
+      <java jar="${ORACLE_HOME}/webservices/lib/WebServicesAssembler.jar" fork="yes"
+          failonerror="true">
+        <arg value="-config"/>
+        <arg value="./config.xml"/>
+      </java>
+      <echo message="Creating ${app.name}.ear Done."/>
+   </target>
+
+   <target name="touch_wsdl" description="set soap:address location attribute in all WSDL">
+      <echo message="Changing location in WSDL files ..."/>
+      <copy todir="${build.dir}/WEB-INF" overwrite="yes">
+        <fileset dir="WEB-INF" includes="**/*.wsdl"/>
+      </copy>
+      <replace dir="${build.dir}/WEB-INF" includes="**/*.wsdl" summary="yes"
+        token="localhost:8888" value="${app.host_port}"/>
+      <echo message="Changing location in WSDL files Done."/>
+   </target>
+
+   <target name="update_package">
+      <echo message="Updating ${app.name}.ear ..."/>
+      <!-- extract the war file from the ear file, to make some modifications -->
+      <exec executable="jar">
+        <arg line="xvf ${app.name}.ear ${app.name}_web.war"/>
+      </exec>
+      <!-- modify existing files -->
+      <exec executable="jar">
+        <arg line="uvf ${app.name}_web.war index.html"/>
+      </exec>
+      <exec executable="jar">
+        <arg line="uvf ${app.name}_web.war WEB-INF/web.xml"/>
+      </exec>
+      <!-- add additional files -->
+      <exec executable="jar" dir="${build.dir}">
+        <arg line="uvf ../${app.name}_web.war WEB-INF/classes/oracle/j2ee/ws_example"/>
+      </exec>
+      <exec executable="jar" dir="./public_html">
+        <arg line="uvf ../${app.name}_web.war blaf.css r2_plan.html r3_plan.html"/>
+      </exec>
+      <exec executable="jar" dir="./public_html">
+        <arg line="uvf ../${app.name}_web.war wsdl r3 img/image001.gif img/image002.gif img/image003.gif"/>
+      </exec>
+      <!-- includes updated .war file in existing .ear file -->
+      <exec executable="jar" description="includes updated .war file in existing .ear file">
+        <arg line="uvf ${app.name}.ear ${app.name}_web.war"/>
+      </exec>
+      <!-- removes updated .war file from current directory -->
+      <delete file="${app.name}_web.war"/>
+      <echo message="Updating ${app.name}.ear Done."/>
+   </target>
+
+   <target name="package" depends="create_package,touch_wsdl,update_package" />
+
+   <target name="deploy">
+      <echo message="Deploying webservice package ..."/>
+      <java jar="${ORACLE_HOME}/j2ee/home/admin.jar" fork="yes"
+         classpath="${common.class.path}"
+         failonerror="true">
+         <arg line="${ormi.url} ${user.id} ${password} -deploy -file ./${app.name}.ear -deploymentName ${app.name}"/>
+      </java>
+      <echo message="Binding webservice package ..."/>
+      <java jar="${ORACLE_HOME}/j2ee/home/admin.jar" fork="yes"
+         classpath="${common.class.path}"
+         failonerror="true">
+         <arg line="${ormi.url} ${user.id} ${password} -bindWebApp ${app.name} ${app.name}_web http-web-site ${root.context}"/> 
+      </java>
+      <echo message="Deploying/Binding webservice package Done "/>
+   </target>
+
+   <target name="remote_touch_wsdl" description="set soap:address location attribute in all WSDL">
+      <property name="target.url" value="localhost:8888"/>
+      <echo message="Changing location in WSDL files ..."/>
+      <copy todir="${build.dir}/WEB-INF" overwrite="yes">
+        <fileset dir="WEB-INF" includes="**/*.wsdl"/>
+      </copy>
+      <replace dir="${build.dir}/WEB-INF" includes="**/*.wsdl" summary="yes"
+        token="localhost:8888" value="${target.url}"/>
+      <echo message="Changing location in WSDL files Done."/>
+   </target>
+
+   <target name="remote_deploy" depends="create_package,remote_touch_wsdl,update_package">
+      <echo message="Deploying webservice package to ${target.url} using ${admin.url} ..."/>
+      <java jar="${ORACLE_HOME}/j2ee/home/admin.jar" fork="yes"
+         classpath="${common.class.path}"
+         failonerror="true">
+         <arg line="ormi://${admin.url} ${user.id} ${password} -deploy -file ./${app.name}.ear -deploymentName ${app.name}"/>
+      </java>
+      <echo message="Binding webservice package ..."/>
+      <java jar="${ORACLE_HOME}/j2ee/home/admin.jar" fork="yes"
+         classpath="${common.class.path}"
+         failonerror="true">
+         <arg line="ormi://${admin.url} ${user.id} ${password} -bindWebApp ${app.name} ${app.name}_web http-web-site ${root.context}"/> 
+      </java>
+      <echo message="Deploying/Binding webservice package Done "/>
+   </target>
+
+   <target name="local_run">
+      <java 
+         classpath="${ORACLE_HOME}/j2ee/home/oc4j.jar:./build/classes"
+         classname="oracle.j2ee.ws_example.TestDriver"
+         failonerror="true" fork="yes">
+        <arg value="-v"/>
+      </java>
+   </target>
+
+   <target name="remote_run">
+      <java 
+         classpath="${ORACLE_HOME}/j2ee/home/oc4j.jar:./build/classes"
+         classname="oracle.j2ee.ws_example.TestDriver"
+         failonerror="true" fork="yes">
+        <!--jvmarg value="-Dhttp.proxyHost=YourProxyHostNameHere" />
+        <jvmarg value="-Dhttp.proxyPort=80" /-->
+        <arg value="-r"/>
+      </java>
+   </target>
+
+  <target name="all" depends="package,deploy,local_run" />
+
+</project>

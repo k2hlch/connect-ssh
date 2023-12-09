@@ -1,0 +1,49 @@
+<web-service>
+
+    <display-name>Stateless Java Document Web Service</display-name>
+    <description>Stateless Java Document Web Service Example</description>
+
+    <!-- Specifies the resulting web service archive will be stored in ./statelessdocws.ear -->
+    <destination-path>./statelessdocws.ear</destination-path>
+
+    <!-- Specifies the temporary directory that web service assembly tool can create temporary files. -->
+    <temporary-directory>./temp</temporary-directory>
+
+    <!-- Specifies the web service will be accessed in the servlet context named "/statelessdocws". -->
+    <context>/statelessdocws</context>
+
+    <!-- to package the  stylesheet to format input xml --> 
+    <option name="source-path">converter.xsl</option> 
+
+    <!-- Specifies the web service will be stateless -->
+
+    <stateless-java-service>
+        <interface-name>StatelessDoc</interface-name>
+        <class-name>StatelessDocImpl</class-name>
+
+        <!-- Specifies the web service will be accessed in the uri named "/docService" within the servlet context. -->
+        <uri>/docservice</uri>
+
+        <!-- Specifies the location of Java class files ./classes -->
+        <java-resource>./classes</java-resource>
+        
+        <!-- Specifies that it uses document style SOAP messaging -->
+        <message-style>doc</message-style>
+ 
+   </stateless-java-service>
+
+    <!-- generate the wsdl -->
+    <wsdl-gen>
+	   <wsdl-dir>wsdl</wsdl-dir>
+    <!-- over-write a pregenerated wsdl , turn it 'false' to use the pregenerated wsdl-->
+	   <option name="force">true</option>
+	   <option name="httpServerURL">http://localhost:8888</option>
+    </wsdl-gen>
+
+    <!-- generate the proxy -->
+    <proxy-gen>
+	   <proxy-dir>proxy</proxy-dir>
+	   <option name="include-source">true</option>
+    </proxy-gen>
+
+</web-service>
